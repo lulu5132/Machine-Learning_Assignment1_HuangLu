@@ -16,6 +16,12 @@ IS_HEADLESS = os.environ.get("SDL_VIDEODRIVER") == "dummy"
 
 # Global Assets Dictionary
 ASSETS = {}
+OUTPUT_DIR = "outputs"
+
+
+def output_path(filename):
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
+    return os.path.join(OUTPUT_DIR, filename)
 
 def load_game_assets():
     """Initializes assets. Must be called after pygame.display.set_mode."""
@@ -406,8 +412,9 @@ def plot_learning(rewards):
     plt.title("Learning Curve")
     plt.xlabel("Episode")
     plt.ylabel("Reward")
-    plt.savefig("learning_curve.png")
-    print("Learning curve saved.")
+    curve_file = output_path("learning_curve.png")
+    plt.savefig(curve_file)
+    print(f"Learning curve saved to {curve_file}.")
 
 if __name__ == "__main__":
     env = SupermarketEnv()
@@ -435,7 +442,7 @@ if __name__ == "__main__":
         if os.path.exists("q_table.npy"):
             agent.load_model()
             print("Regenerating demo GIF from saved model...")
-            run_simulation_demo(agent, env, save_gif=True, gif_name="trained_agent_demo.gif")
+            run_simulation_demo(agent, env, save_gif=True, gif_name=output_path("trained_agent_demo.gif"))
         else:
             print("No trained model found! Run 'python main.py' first to train.")
             
@@ -446,4 +453,4 @@ if __name__ == "__main__":
         plot_learning(rewards) # Save plot
         
         # Generate Demo GIF with new visuals
-        run_simulation_demo(agent, env, save_gif=True, gif_name="trained_agent_demo.gif")
+        run_simulation_demo(agent, env, save_gif=True, gif_name=output_path("trained_agent_demo.gif"))

@@ -16,6 +16,7 @@ This project implements a **Q-Learning based Reinforcement Learning agent** that
 - `agent.py`: Q-Learning algorithm.
 - `environment.py`: Grid world logic.
 - `config.py`: Hyperparameters.
+- `outputs/`: Generated artifacts (`learning_curve.png`, `trained_agent_demo.gif`, etc.).
 
 ## How to Run
 
@@ -33,8 +34,8 @@ python main.py
 ```
 **Output:**
 - `q_table.npy`: Trained model.
-- `trained_agent_demo.gif`: A video showing the AI guiding the child in the supermarket.
-- `learning_curve.png`: Performance graph.
+- `outputs/trained_agent_demo.gif`: A video showing the AI guiding the child in the supermarket.
+- `outputs/learning_curve.png`: Performance graph.
 
 ### 2. Watch Mode (No GIF)
 Use an existing trained model and open a live window without saving GIF:
@@ -47,6 +48,7 @@ Use an existing `q_table.npy` and regenerate `trained_agent_demo.gif`:
 ```bash
 python main.py --demo
 ```
+Output file: `outputs/trained_agent_demo.gif`
 
 ### 4. Interactive Mode (Playable)
 If you are running on a local machine with a display, you can control the child character yourself:
