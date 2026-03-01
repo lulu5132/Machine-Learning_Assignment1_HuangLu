@@ -212,6 +212,22 @@ def run_simulation_demo(agent, env, save_gif=True, gif_name="demo.gif"):
     done = False
     total_reward = 0
     frames = []
+
+    # Draw initial frame at start position before any movement
+    initial_action = ACTION_NONE
+    initial_reward = 0
+    draw_game_grid(screen, env)
+    draw_guidance(screen, initial_action, env.child.position, env.target_pos)
+    draw_ui(screen, env.steps, initial_action, initial_reward, total_reward, "")
+    pygame.display.flip()
+
+    if save_gif:
+        frame = pygame.surfarray.array3d(screen)
+        frame = frame.swapaxes(0, 1)
+        frames.append(frame)
+    else:
+        clock = pygame.time.Clock()
+        clock.tick(10)
     
     # Run loop
     steps = 0
@@ -419,9 +435,10 @@ def plot_learning(rewards):
 if __name__ == "__main__":
     env = SupermarketEnv()
     agent = QLearningAgent()
+    cli_args = set(sys.argv[1:])
     
     # Check arguments
-    if "--play" in sys.argv:
+    if "--play" in cli_args or "-play" in cli_args or "-p" in cli_args:
         # Interactive Mode
         if os.path.exists("q_table.npy"):
             agent.load_model()
@@ -429,7 +446,7 @@ if __name__ == "__main__":
         else:
             print("No trained model found! Run 'python main.py' first to train.")
             
-    elif "--watch" in sys.argv:
+    elif "--watch" in cli_args or "-watch" in cli_args or "-w" in cli_args:
         # Watch Mode: show trained agent in a live window, no GIF saved
         if os.path.exists("q_table.npy"):
             agent.load_model()
@@ -437,7 +454,7 @@ if __name__ == "__main__":
         else:
             print("No trained model found! Run 'python main.py' first to train.")
 
-    elif "--demo" in sys.argv:
+    elif "--demo" in cli_args or "-demo" in cli_args or "-d" in cli_args:
         # Demo Mode: regenerate GIF from existing model without retraining
         if os.path.exists("q_table.npy"):
             agent.load_model()
